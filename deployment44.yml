@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: analytics-4
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: analytics-4
+  template:
+    metadata:
+      labels:
+        app: analytics-4
+    spec:
+      containers:
+      - name: analytics-1
+        image: 658761620615.dkr.ecr.us-east-1.amazonaws.com/udacity-repos:9
+        ports: 5432:5432
+        - containerPort: 5000 
+          name: 
+        resources:
+          requests:
+            memory: 
+            c
