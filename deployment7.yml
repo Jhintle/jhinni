@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: analytic-5 
+  labels:
+    name: analytic-5
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: analytic-5
+  template:
+    metadata:
+      labels:
+        service: analytic-5
+    spec:
+      containers:
+      - name: analytic
+        image: 948918782996.dkr.ecr.us-east-1.amazonaws.com/udacity-repo:latest
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /health_check
+            port: 5432
+          initialDelaySeconds: 5
+          timeoutSeconds: 2
+        readinessProbe:
+          httpGet:
+            path: "/readiness_check"
+            port: 5432
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
+        env:
+        - name: BUILD_VERSION
+          value: 
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: my-app-credentials
+              key: DB_USERNAME
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: my-app-credentials
+              key: DB_PASSWORD
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: config-map
+              key: DB_PORT
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: config-map
+              key: DB_HOST
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: config-map
+              key: DB_PORT
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: config-map
+              key: DB_N
